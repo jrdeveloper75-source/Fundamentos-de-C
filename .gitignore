@@ -1,0 +1,21 @@
+# Ejecutables
+*.exe
+*.out
+
+# Archivos objeto
+*.o
+*.obj
+
+# Librerías
+*.a
+*.so
+*.dll
+
+# Archivos temporales
+*.tmp
+
+# Configuración del editor
+.vscode/
+
+# macOS
+.DS_Store
