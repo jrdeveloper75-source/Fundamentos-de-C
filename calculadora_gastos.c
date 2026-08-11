@@ -5,12 +5,14 @@ y luego calcular el balance final, dar un promedio. y mostrar un resumen al fina
 
 int main(){
     //Variables para los gastos.
-    float arriendo, servicios, transporte, comida, entretenimiento;
+    float gasto;
     //Variables para operaciones y resultados.
-    float total, promedio, mayor_gasto;
-    float presupuesto;
+    float total, promedio, presupuesto;
+    float mayor_gasto = 0.0; // Inicializamos el mayor gasto a 0
+    float menor_gasto = 0.0; // Inicializamos el menor gasto a 0
     //variables para clasificar gastos
     float bajo, medio;
+    int contador, cantidad_gastos;
 
     printf("Bienvenido a la calculadora de gastos. Por favor, ingresa tu presupuesto mensual:\n");
     scanf("%f", &presupuesto);
@@ -20,81 +22,47 @@ int main(){
         return 1; // Salir del programa con un código de error.
     }
 
-    printf("Ahora ingresa tus gastos en las siguientes categorías:\n");
-    printf("Gasto en arriendo: ");
-    scanf("%f", &arriendo);
+    printf("¿Cuántos gastos deseas ingresar?\n");
+    scanf("%d", &cantidad_gastos);
 
-    if(arriendo < 0){
-        printf("El gasto en arriendo no puede ser negativo. Por favor, reinicia el programa e ingresa un valor válido.\n");
-        return 1; // Salir del programa con un código de error.
+    for(contador = 1; contador <= cantidad_gastos; contador++){
+        printf("Ingresa el gasto número %d:\n", contador);
+        scanf("%f", &gasto);
+        total += gasto;
+
+        if(gasto >= 0){
+            if(menor_gasto == 0.0){
+                menor_gasto = gasto;
+            }
+            // Actualizamos el mayor y menor gasto
+            if(gasto > mayor_gasto){
+                mayor_gasto = gasto;
+            }
+            else if (gasto < mayor_gasto && gasto < menor_gasto){
+                menor_gasto = gasto;
+            }
+        }else{
+            printf("El gasto ingresado no es válido. Por favor, ingresa un número positivo.\n");
+            contador--; // Decrementamos el contador para repetir la entrada del gasto
+            continue; // Saltamos a la siguiente iteración del bucle
+        }
+
+        // Calculamos el promedio solo después de ingresar todos los gastos
+        if(contador == cantidad_gastos){
+            promedio = total / cantidad_gastos;
+        }
     }
 
-    printf("Gasto en servicios: ");
-    scanf("%f", &servicios);
-
-    if(servicios < 0){
-        printf("El gasto en servicios no puede ser negativo. Por favor, reinicia el programa e ingresa un valor válido.\n");
-        return 1; // Salir del programa con un código de error.
-    }
-
-    printf("Gasto en transporte: ");
-    scanf("%f", &transporte);
-
-    if(transporte < 0){
-        printf("El gasto en transporte no puede ser negativo. Por favor, reinicia el programa e ingresa un valor válido.\n");
-        return 1; // Salir del programa con un código de error.
-    }
-    printf("Gasto en comida: ");
-    scanf("%f", &comida);
-
-    if(comida < 0){
-        printf("El gasto en comida no puede ser negativo. Por favor, reinicia el programa e ingresa un valor válido.\n");
-        return 1; // Salir del programa con un código de error.
-    }
-    printf("Gasto en entretenimiento: ");
-    scanf("%f", &entretenimiento);
-    
-    if(entretenimiento < 0){
-        printf("El gasto en entretenimiento no puede ser negativo. Por favor, reinicia el programa e ingresa un valor válido.\n");
-        return 1; // Salir del programa con un código de error.
-    }
-
-    //Calcular el total de gastos.
-    total = arriendo + servicios + transporte + comida + entretenimiento;
-    promedio = total / 5;
-
-    //Mostrar el resumen.
-    printf("Resumen de gastos:\n");
-    printf("Arriendo: %.2f\n", arriendo);
-    printf("Servicios: %.2f\n", servicios);
-    printf("Transporte: %.2f\n", transporte);
-    printf("Comida: %.2f\n", comida);
-    printf("Entretenimiento: %.2f\n", entretenimiento);
-    printf("Total de gastos: %.2f\n", total);
-    printf("Promedio de gastos: %.2f\n", promedio);
-    printf("Presupuesto mensual: %.2f\n", presupuesto);
+    printf("Total: %.2f\n", total);
+    printf("Promedio: %.2f\n", promedio);
+    printf("Mayor gasto: %.2f\n", mayor_gasto);
+    printf("Menor gasto: %.2f\n", menor_gasto);
 
     if(total > presupuesto){
         printf("¡Cuidado! Has excedido tu presupuesto mensual.\n");
     } else {
         printf("¡Bien hecho! Estás dentro de tu presupuesto mensual.\n");
     }
-
-    mayor_gasto = arriendo;
-    
-    if(servicios > mayor_gasto){
-        mayor_gasto = servicios;
-    }
-    if(transporte > mayor_gasto){
-        mayor_gasto = transporte;
-    }
-    if(comida > mayor_gasto){
-        mayor_gasto = comida;
-    }
-    if(entretenimiento > mayor_gasto){
-        mayor_gasto = entretenimiento;
-    }
-    printf("El mayor gasto fue: %.2f\n", mayor_gasto);
 
     bajo = presupuesto * 0.2;
     medio = presupuesto * 0.5;
