@@ -3,29 +3,14 @@ Se trata de una calculadora de gastos que permite al usuario ingresar sus ingres
 y luego calcular el balance final, dar un promedio. y mostrar un resumen al final.*/
 #include<stdio.h>
 
-int main(){
-    //Variables para los gastos.
-    float gasto;
-    //Variables para operaciones y resultados.
-    float total, promedio, presupuesto;
-    float mayor_gasto = 0.0; // Inicializamos el mayor gasto a 0
-    float menor_gasto = 0.0; // Inicializamos el menor gasto a 0
-    //variables para clasificar gastos
-    float bajo, medio;
-    int contador, cantidad_gastos;
-
-    printf("Bienvenido a la calculadora de gastos. Por favor, ingresa tu presupuesto mensual:\n");
-    scanf("%f", &presupuesto);
-
-    if (presupuesto <= 0){
-        printf("El presupuesto debe ser un número positivo. Por favor, reinicia el programa e ingresa un valor válido.\n");
-        return 1; // Salir del programa con un código de error.
-    }
+float gastos(int cantidad_gastos){
+    float gasto, total, promedio;
+    float menor_gasto = 0.0, mayor_gasto = 0.0; // Inicializamos el menor y mayor gasto a 0
 
     printf("¿Cuántos gastos deseas ingresar?\n");
     scanf("%d", &cantidad_gastos);
 
-    for(contador = 1; contador <= cantidad_gastos; contador++){
+    for(int contador = 1; contador <= cantidad_gastos; contador++){
         printf("Ingresa el gasto número %d:\n", contador);
         scanf("%f", &gasto);
         total += gasto;
@@ -58,6 +43,13 @@ int main(){
     printf("Mayor gasto: %.2f\n", mayor_gasto);
     printf("Menor gasto: %.2f\n", menor_gasto);
 
+    return total; // Retornamos el total para usarlo en la función main
+}
+
+void evaluar_presupuesto(float presupuesto, float total){
+    //variables para clasificar gastos
+    float bajo, medio;
+
     if(total > presupuesto){
         printf("¡Cuidado! Has excedido tu presupuesto mensual.\n");
     } else {
@@ -74,6 +66,22 @@ int main(){
     } else {
         printf("Tus gastos son altos en comparación con tu presupuesto.\n");
     }
+}
+
+int main(){
+    float presupuesto, total;
+    int cantidad_gastos;
+
+    printf("Bienvenido a la calculadora de gastos. Por favor, ingresa tu presupuesto mensual:\n");
+    scanf("%f", &presupuesto);
+
+    if (presupuesto <= 0){
+        printf("El presupuesto debe ser un número positivo. Por favor, reinicia el programa e ingresa un valor válido.\n");
+        return 1; // Salir del programa con un código de error.
+    }
+
+    total = gastos(cantidad_gastos); // Llamamos a la función gastos y almacenamos el total
+    evaluar_presupuesto(presupuesto, total); // Llamamos a la función evaluar_presupuesto para dar retroalimentación
 
     return 0;
 }
