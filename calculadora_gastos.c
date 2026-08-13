@@ -4,23 +4,45 @@ y luego calcular el balance final, dar un promedio. y mostrar un resumen al fina
 #include<stdio.h>
 #include<string.h>
 
-void gastos(int gasto[],int cantidad_gastos){
+void gastos(int *gasto, int cantidad_gastos);
+float total_gastos(int *gasto, int cantidad_gastos);
+float promedio_gastos(int *gasto, int cantidad_gastos);
+void evaluar_presupuesto(float total);
+
+int main(){
+    int gasto[100]; // Declaramos un arreglo para almacenar los gastos
+    int cantidad_gastos;
+    float total;
+    int *p_gasto = gasto; // Declaramos un puntero para apuntar al arreglo de gastos
+
+    printf("¿Cuántos gastos deseas ingresar?\n");
+    scanf("%d", &cantidad_gastos);
+
+    gastos(p_gasto, cantidad_gastos); // Llamamos a la función gastos y almacenamos los gastos
+    total = total_gastos(p_gasto, cantidad_gastos); // Calculamos el total de gastos
+    evaluar_presupuesto(total); // Llamamos a la función evaluar_presupuesto para dar retroalimentación
+    promedio_gastos(p_gasto, cantidad_gastos); // Llamamos a la función promedio_gastos para calcular y mostrar el promedio
+
+    return 0;
+}
+
+void gastos(int *gasto, int cantidad_gastos){
     float menor_gasto = 0.0, mayor_gasto = 0.0; // Inicializamos el menor y mayor gasto a 0
 
     for(int contador = 0; contador < cantidad_gastos; contador++){
         printf("Ingresa el gasto número %d:\n", contador);
-        scanf("%d", &gasto[contador]);
+        scanf("%d", gasto + contador); // Almacenamos el gasto ingresado en el arreglo usando aritmética de punteros
 
-        if(gasto[contador] >= 0){
+        if(*(gasto + contador) >= 0){
             if(menor_gasto == 0.0){
-                menor_gasto = gasto[contador]; // Inicializamos el menor gasto con el primer gasto ingresado
+                menor_gasto = *(gasto + contador); // Inicializamos el menor gasto con el primer gasto ingresado
             }
             // Actualizamos el mayor y menor gasto
-            if(gasto[contador] > mayor_gasto){
-                mayor_gasto = gasto[contador];
+            if(*(gasto + contador) > mayor_gasto){
+                mayor_gasto = *(gasto + contador);
             }
-            else if (gasto[contador] < menor_gasto){
-                menor_gasto = gasto[contador];
+            else if (*(gasto + contador) < menor_gasto){
+                menor_gasto = *(gasto + contador);
             }
         }else{
             printf("El gasto ingresado no es válido. Por favor, ingresa un número positivo.\n");
@@ -33,11 +55,11 @@ void gastos(int gasto[],int cantidad_gastos){
     printf("Menor gasto: %.2f\n", menor_gasto);
 }
 
-float total_gastos(int gasto[], int cantidad_gastos){
+float total_gastos(int *gasto, int cantidad_gastos){
     float total = 0.0;
     
     for(int contador = 0; contador < cantidad_gastos; contador++){
-        total += gasto[contador];
+        total += *(gasto + contador);
     }
 
     printf("Total: %.2f\n", total);
@@ -45,7 +67,7 @@ float total_gastos(int gasto[], int cantidad_gastos){
     return total;
 }
 
-float promedio_gastos(int gasto[], int cantidad_gastos){
+float promedio_gastos(int *gasto, int cantidad_gastos){
     float promedio;
 
     promedio = total_gastos(gasto, cantidad_gastos) / cantidad_gastos;
@@ -78,20 +100,4 @@ void evaluar_presupuesto(float total){
     } else {
         printf("Tus gastos son altos en comparación con tu presupuesto.\n");
     }
-}
-
-int main(){
-    int gasto[100]; // Declaramos un arreglo para almacenar los gastos
-    int cantidad_gastos;
-    float total;
-
-    printf("¿Cuántos gastos deseas ingresar?\n");
-    scanf("%d", &cantidad_gastos);
-
-    gastos(gasto, cantidad_gastos); // Llamamos a la función gastos y almacenamos los gastos
-    total = total_gastos(gasto, cantidad_gastos); // Calculamos el total de gastos
-    evaluar_presupuesto(total); // Llamamos a la función evaluar_presupuesto para dar retroalimentación
-    promedio_gastos(gasto, cantidad_gastos); // Llamamos a la función promedio_gastos para calcular y mostrar el promedio
-
-    return 0;
 }
