@@ -2,53 +2,65 @@
 Se trata de una calculadora de gastos que permite al usuario ingresar sus ingresos y gastos, 
 y luego calcular el balance final, dar un promedio. y mostrar un resumen al final.*/
 #include<stdio.h>
+#include<string.h>
 
-float gastos(int cantidad_gastos){
-    float gasto, total, promedio;
+void gastos(int gasto[],int cantidad_gastos){
     float menor_gasto = 0.0, mayor_gasto = 0.0; // Inicializamos el menor y mayor gasto a 0
 
-    printf("¿Cuántos gastos deseas ingresar?\n");
-    scanf("%d", &cantidad_gastos);
-
-    for(int contador = 1; contador <= cantidad_gastos; contador++){
+    for(int contador = 0; contador < cantidad_gastos; contador++){
         printf("Ingresa el gasto número %d:\n", contador);
-        scanf("%f", &gasto);
-        total += gasto;
+        scanf("%d", &gasto[contador]);
 
-        if(gasto >= 0){
+        if(gasto[contador] >= 0){
             if(menor_gasto == 0.0){
-                menor_gasto = gasto;
+                menor_gasto = gasto[contador]; // Inicializamos el menor gasto con el primer gasto ingresado
             }
             // Actualizamos el mayor y menor gasto
-            if(gasto > mayor_gasto){
-                mayor_gasto = gasto;
+            if(gasto[contador] > mayor_gasto){
+                mayor_gasto = gasto[contador];
             }
-            else if (gasto < mayor_gasto && gasto < menor_gasto){
-                menor_gasto = gasto;
+            else if (gasto[contador] < menor_gasto){
+                menor_gasto = gasto[contador];
             }
         }else{
             printf("El gasto ingresado no es válido. Por favor, ingresa un número positivo.\n");
             contador--; // Decrementamos el contador para repetir la entrada del gasto
             continue; // Saltamos a la siguiente iteración del bucle
         }
+    }
 
-        // Calculamos el promedio solo después de ingresar todos los gastos
-        if(contador == cantidad_gastos){
-            promedio = total / cantidad_gastos;
-        }
+    printf("Mayor gasto: %.2f\n", mayor_gasto);
+    printf("Menor gasto: %.2f\n", menor_gasto);
+}
+
+float total_gastos(int gasto[], int cantidad_gastos){
+    float total = 0.0;
+    
+    for(int contador = 0; contador < cantidad_gastos; contador++){
+        total += gasto[contador];
     }
 
     printf("Total: %.2f\n", total);
-    printf("Promedio: %.2f\n", promedio);
-    printf("Mayor gasto: %.2f\n", mayor_gasto);
-    printf("Menor gasto: %.2f\n", menor_gasto);
 
-    return total; // Retornamos el total para usarlo en la función main
+    return total;
 }
 
-void evaluar_presupuesto(float presupuesto, float total){
+float promedio_gastos(int gasto[], int cantidad_gastos){
+    float promedio;
+
+    promedio = total_gastos(gasto, cantidad_gastos) / cantidad_gastos;
+    printf("Promedio: %.2f\n", promedio);
+
+    return promedio;
+}
+
+void evaluar_presupuesto(float total){
     //variables para clasificar gastos
     float bajo, medio;
+    float presupuesto;
+
+    printf("Ingresa tu presupuesto mensual:\n");
+    scanf("%f", &presupuesto);
 
     if(total > presupuesto){
         printf("¡Cuidado! Has excedido tu presupuesto mensual.\n");
@@ -69,19 +81,17 @@ void evaluar_presupuesto(float presupuesto, float total){
 }
 
 int main(){
-    float presupuesto, total;
+    int gasto[100]; // Declaramos un arreglo para almacenar los gastos
     int cantidad_gastos;
+    float total;
 
-    printf("Bienvenido a la calculadora de gastos. Por favor, ingresa tu presupuesto mensual:\n");
-    scanf("%f", &presupuesto);
+    printf("¿Cuántos gastos deseas ingresar?\n");
+    scanf("%d", &cantidad_gastos);
 
-    if (presupuesto <= 0){
-        printf("El presupuesto debe ser un número positivo. Por favor, reinicia el programa e ingresa un valor válido.\n");
-        return 1; // Salir del programa con un código de error.
-    }
-
-    total = gastos(cantidad_gastos); // Llamamos a la función gastos y almacenamos el total
-    evaluar_presupuesto(presupuesto, total); // Llamamos a la función evaluar_presupuesto para dar retroalimentación
+    gastos(gasto, cantidad_gastos); // Llamamos a la función gastos y almacenamos los gastos
+    total = total_gastos(gasto, cantidad_gastos); // Calculamos el total de gastos
+    evaluar_presupuesto(total); // Llamamos a la función evaluar_presupuesto para dar retroalimentación
+    promedio_gastos(gasto, cantidad_gastos); // Llamamos a la función promedio_gastos para calcular y mostrar el promedio
 
     return 0;
 }
