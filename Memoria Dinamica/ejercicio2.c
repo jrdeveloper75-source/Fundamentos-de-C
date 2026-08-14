@@ -2,7 +2,7 @@
 #include<stdlib.h>
 
 int main(){
-    int cantidad;
+    int cantidad, suma = 0, promedio, mayor = 0, menor = 0;
 
     printf("Ingrese la cantidad de elementos que desea almacenar:\n");
     scanf("%d", &cantidad);
@@ -21,8 +21,21 @@ int main(){
 
     printf("Valores almacenados en la memoria dinámica:\n");
     for(int i = 0; i < cantidad; i++){
-        printf("%d\n", *(ptr + i)); // Imprimimos los valores almacenados usando aritmética de punteros
+        suma += *(ptr + i); // Sumamos los valores almacenados
+        if(*(ptr + i) > mayor){
+            mayor = *(ptr + i); // Actualizamos el mayor valor
+        }
+        if(menor == 0 || *(ptr + i) < menor){
+            menor = *(ptr + i); // Actualizamos el menor valor
+        }
     }
+    promedio = suma / cantidad;
+
+    printf("Suma: %d\n", suma);
+    printf("Promedio: %d\n", promedio);
+    printf("Mayor valor: %d\n", mayor);
+    printf("Menor valor: %d\n", menor);
+
     free(ptr); // Liberamos la memoria reservada
     return 0; // Salimos del programa con un código de éxito   
 }
